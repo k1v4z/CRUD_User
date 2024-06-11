@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: #your root pasword
+      MYSQL_DATABASE: #your database name
+      MYSQL_USER: #your user
+      MYSQL_PASSSWORD: #your password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - custom_network
+  
+  app:
+    build: .
+    container_name: node-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: #your host
+      DB_USER: #your user
+      DB_PASSWORD: #your password
+      DB_NAME: test
+    networks:
+      - custom_network
+
+networks:
+  custom_network:
+    external: true
+
+volumes:
+  db-data:
